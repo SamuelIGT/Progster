@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour {
-	[Header("\tMessage Controller")]
+public class PlayerController : MonoBehaviour
+{
+	[Header ("\tMessage Controller")]
 	public string message;
 
-	[Header("\tHUD Controller")]
+	[Header ("\tHUD Controller")]
 	public HUDController hud;
 
-	[Header("\tPlayer Skills")]
+	[Header ("\tPlayer Skills")]
 	public float hopHeight = 1.25f;
 
 	private bool hopping = false;
@@ -23,7 +24,8 @@ public class PlayerController : MonoBehaviour {
 	private int coinSeedsCount;
 
 
-	void Start(){
+	void Start ()
+	{
 		playerTranform = this.gameObject.transform;
 		stageSeedsCount = 0;
 		coinSeedsCount = 0;
@@ -31,34 +33,57 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-	void Update() {
-		if (Input.GetKeyDown(KeyCode.Space)&& !hopping && !walking) {
+	void Update ()
+	{
+		/*if (Input.GetKeyDown(KeyCode.Space)&& !hopping && !walking) {
 			targetPosition = new Vector3(playerTranform.position.x + 2, playerTranform.position.y, 0.0f);
 			Vector3 pos = targetPosition;
 			pos.z = 0.0f;
 			StartCoroutine(Hop(pos, 0.75f));
-		}
+		}*/
 
-		if (Input.GetKeyDown (KeyCode.RightArrow) && !walking && !hopping) {
+		/*if (Input.GetKeyDown (KeyCode.RightArrow) && !walking && !hopping) {
 			targetPosition = new Vector3(playerTranform.position.x + 1, playerTranform.position.y, 0.0f);
 			StartCoroutine (Walk(targetPosition, 0.75f));
-		}
+		}*/
 
 		if (Input.GetKeyDown (KeyCode.LeftArrow) && !walking && !hopping) {
-			targetPosition = new Vector3(playerTranform.position.x - 1, playerTranform.position.y, 0.0f);
-			StartCoroutine (Walk(targetPosition, 0.75f));
+			targetPosition = new Vector3 (playerTranform.position.x - 1, playerTranform.position.y, 0.0f);
+			StartCoroutine (Walk (targetPosition, 0.75f));
 		}
 
 	}
-	IEnumerator Walk(Vector3 target, float time){
-		if (walking) yield break;
+
+	public void Jump ()
+	{
+		targetPosition = new Vector3 (playerTranform.position.x + 2, playerTranform.position.y, 0.0f);
+		Vector3 pos = targetPosition;
+		pos.z = 0.0f;
+		StartCoroutine (Hop (pos, 0.75f));
+	}
+
+	public void Walk ()
+	{
+		targetPosition = new Vector3 (playerTranform.position.x + 1, playerTranform.position.y, 0.0f);
+		StartCoroutine (Walk (targetPosition, 0.75f));
+	}
+
+	void UseLadder ()
+	{
+
+	}
+
+	IEnumerator Walk (Vector3 target, float time)
+	{
+		if (walking)
+			yield break;
 
 		walking = true;
 		var startPos = transform.position;
 		var timer = 0.0f;
 
 		while (timer <= 1.0f) {
-			transform.position = Vector3.Lerp(startPos, target, timer);
+			transform.position = Vector3.Lerp (startPos, target, timer);
 
 			timer += Time.deltaTime / time;
 			yield return null;
@@ -68,16 +93,18 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	IEnumerator Hop(Vector3 dest, float time) {
-		if (hopping) yield break;
+	IEnumerator Hop (Vector3 dest, float time)
+	{
+		if (hopping)
+			yield break;
 
 		hopping = true;
 		var startPos = transform.position;
 		var timer = 0.0f;
 
 		while (timer <= 1.0f) {
-			var height = Mathf.Sin(Mathf.PI * timer) * hopHeight;
-			transform.position = Vector3.Lerp(startPos, dest, timer) + Vector3.up * height; 
+			var height = Mathf.Sin (Mathf.PI * timer) * hopHeight;
+			transform.position = Vector3.Lerp (startPos, dest, timer) + Vector3.up * height; 
 
 			timer += Time.deltaTime / time;
 			yield return null;
@@ -86,7 +113,8 @@ public class PlayerController : MonoBehaviour {
 		playerTranform.position = targetPosition;
 	}
 
-	void OnTriggerEnter2D(Collider2D other) {
+	void OnTriggerEnter2D (Collider2D other)
+	{
 		if (other.CompareTag ("Seed")) {
 			other.gameObject.SetActive (false);
 			stageSeedsCount = stageSeedsCount + 1;
@@ -115,7 +143,8 @@ public class PlayerController : MonoBehaviour {
 
 
 
-	public bool getHopping(){
+	public bool getHopping ()
+	{
 		return hopping;
 	}
 
